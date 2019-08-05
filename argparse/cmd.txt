@@ -1,0 +1,8 @@
+python subparser.py a --help
+
+python subparser.py b --help
+
+python subparser.py --backup a --db db1
+
+python subparser.py --backup b --file X
+
