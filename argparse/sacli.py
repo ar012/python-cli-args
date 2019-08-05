@@ -1,53 +1,93 @@
+#!/usr/bin/env python
+
 import argparse
 
-# Initialize the parser
+# create the top-level parser
 parser = argparse.ArgumentParser(
-    prog="sacli",
-    description="site backup or restore or update operation",
-    epilog="Addition information for Server APP"
-)
+  prog='sacli',
+  description="DESCRIPTION: sacli performs backup, restore, update, build",
+  epilog="Addition information for Server APP")
 
-# group = parser.add_mutually_exclusive_group()
-# group.add_argument("-b", "--backup", help="backup a WebCommander site with all it's resources")
-# group.add_argument("-r", "--restore", help="restore a site's from it's backup archive including all the resources")
+# parser.add_argument("--operation", action='store_true', help="Site Operation")
 
-# Add the parameters positional/optional
-parser.add_argument("-o", "--operation", metavar="", required=True, help="site backup or restore or update", choices=["backup", "restore", "update"])
 
-parser.add_argument("-i", "--instance", metavar="", help="Single or Vitual Instance", default="s")
+subparsers = parser.add_subparsers(dest='command', help='To backup, restore, update, build')
 
-parser.add_argument("-H", "--host", metavar="", required=True, help="instance_hostname")
+# create the parser for the "backup" command
+parser_backup = subparsers.add_parser('backup', help='To backup instance' )
+parser_backup.add_argument('-H', '--host', metavar='', help='Instance host name', required=True)
+parser_backup.add_argument('-D', '--digit', metavar='', help='Instance 8-digit', required=True)
+parser_backup.add_argument('-T', '--type', metavar='', help='Instance type: single or virtual', choices=['s', 'v'], required=True)
 
-parser.add_argument("-d", "--digit", metavar="", help="instance_8_digit", default=00000000)
+# create the parser for the "restore" command
+parser_restore = subparsers.add_parser('restore', help='To restore instance')
+parser_restore.add_argument('-H', '--host', metavar='', help='Instance host name', required=True)
+parser_restore.add_argument('-D', '--digit', metavar='', help='Instance 8-digit', required=True)
+parser_restore.add_argument('-T', '--type', metavar='', help='Instance type: single or virtual', choices=['s', 'v'], required=True)
+parser_restore.add_argument('-L', '--location', metavar='', help='Backuped location', required=True)
 
-# mutually exclusive group
-group = parser.add_mutually_exclusive_group()
-group.add_argument("-q", "--quiet", action="store_true", help="print quiet")
-group.add_argument("-v", "--verbose", action="store_true", help="print verbose")
 
-# Parse the arguments
+# create the parser for the "build" command
+parser_build = subparsers.add_parser('build', help='To build binary')
+parser_build.add_argument('-B', '--branch', metavar='', help='Git branch', required=True)
+parser_build.add_argument('-T', '--type', metavar='', choices=['clean', 'optimize'], help='Build Type: clean, optimize', required=True)
+
+# create the parser for the "update" command
+parser_update = subparsers.add_parser('update', help='To update Instance')
+parser_update.add_argument('-H', '--host', metavar='', help='Instance host', required=True)
+parser_update.add_argument('-V', '--version', metavar='', help='Binary version', required=True)
+
+
+# parse some argument lists
 args = parser.parse_args()
-print(args)
 
-if args.operation == "backup":
-    print("site backup")
-elif args.operation == "restore":
-    print("site restore")
-elif args.operation == "update":
-    print("site update")
-else:
-    print("unsupported operation")
+# print(args)
 
-if args.instance == "s":
-    print("single instance backup")
-else:
-    print("virtual instance backup")
+# backup method
+def backup(instance_host, instance_id, instance_type):
+    print("Instance Backup:")
+    print("Instance Host:", instance_host)
+    print("Instance ID:", instance_id)
+    print("Instance Type:", instance_type)
+
+# backup method calling
+if args.command == 'backup':
+    backup(args.host, args.digit, args.type)
+ 
+# restore method
+def restore(instance_host, instance_id, instance_type, location):
+    print("Instance Restoring:")
+    print("Instance Host:", instance_host)
+    print("Instance ID:", instance_id)
+    print("Instance Type:", instance_type)
+    print("Instance location:", location)
+
+# restore method calling
+if args.command == 'restore':
+    restore(args.host, args.digit, args.type, args.location)
 
 
-if int(args.digit) == 00000000:
-    print("single instance")
-else:
-    print("virtual instance")
+# build method
+def build(git_branch, build_type):
+    print("Binary Building:")
+    print("Git Banch:", git_branch)
+    print("Build Type:", build_type)
+   
 
+# build method calling
+if args.command == 'build':
+    build(args.branch, args.type)
+
+
+# update method
+def update(instance_host, binary_version):
+    print("Instance Updating:")
+    print("Instance Host:", instance_host)
+    print("Binary Version:", binary_version)
+   
+
+# update method calling
+if args.command == 'update':
+    update(args.host, args.version)
 
 
