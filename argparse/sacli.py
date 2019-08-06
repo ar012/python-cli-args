@@ -2,11 +2,11 @@
 
 import argparse
 
-# create the top-level parser
+# create the top-level parser Server APP cli
 parser = argparse.ArgumentParser(
   prog='sacli',
   description="DESCRIPTION: sacli performs backup, restore, update, build",
-  epilog="Addition information for Server APP")
+  epilog="Addition information for Server APP cli")
 
 # parser.add_argument("--operation", action='store_true', help="Site Operation")
 
@@ -43,6 +43,8 @@ args = parser.parse_args()
 
 # print(args)
 
+##**********************## 
+
 # backup method
 def backup(instance_host, instance_id, instance_type):
     print("Instance Backup:")
@@ -50,10 +52,6 @@ def backup(instance_host, instance_id, instance_type):
     print("Instance ID:", instance_id)
     print("Instance Type:", instance_type)
 
-# backup method calling
-if args.command == 'backup':
-    backup(args.host, args.digit, args.type)
- 
 # restore method
 def restore(instance_host, instance_id, instance_type, location):
     print("Instance Restoring:")
@@ -62,32 +60,55 @@ def restore(instance_host, instance_id, instance_type, location):
     print("Instance Type:", instance_type)
     print("Instance location:", location)
 
-# restore method calling
-if args.command == 'restore':
-    restore(args.host, args.digit, args.type, args.location)
-
-
 # build method
 def build(git_branch, build_type):
     print("Binary Building:")
     print("Git Banch:", git_branch)
     print("Build Type:", build_type)
-   
-
-# build method calling
-if args.command == 'build':
-    build(args.branch, args.type)
-
 
 # update method
 def update(instance_host, binary_version):
     print("Instance Updating:")
     print("Instance Host:", instance_host)
     print("Binary Version:", binary_version)
-   
 
-# update method calling
-if args.command == 'update':
+
+
+if args.command == 'backup':        # backup method calling
+    backup(args.host, args.digit, args.type)
+ 
+elif args.command == 'restore':       # restore method calling
+    restore(args.host, args.digit, args.type, args.location)
+
+elif args.command == 'build':         # build method calling
+    build(args.branch, args.type)
+
+elif args.command == 'update':        # update method calling
     update(args.host, args.version)
 
+elif args.command == None:            # help information 
+    print("Welcome to Server App cli")
+    print("For help: -h or --help")
+    print("For backup help: backup -h or backup --help")
+    print("Other commands same as")
+
+# else:
+#     print("Unsupported command")
+
+
+# # backup method calling
+# if args.command == 'backup':
+#     backup(args.host, args.digit, args.type)
+ 
+# # restore method calling
+# if args.command == 'restore':
+#     restore(args.host, args.digit, args.type, args.location)
+
+# # build method calling
+# if args.command == 'build':
+#     build(args.branch, args.type)
+
+# # update method calling
+# if args.command == 'update':
+#     update(args.host, args.version)
 

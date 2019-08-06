@@ -25,4 +25,11 @@ usage: sacli -o [backup, restor, build, update]
 backup(host, digit, type)
 
 
-python sa_app.py --operation backup --host host1 --digit 888 --type s
+
+python sacli.py backup -H=host2.cmd2.bitmascot.com -D=12654892 -T=s
+
+python sacli.py restore -H=host2.cmd2.bitmascot.com -D=12654892 -T=s -L=sa_location
+
+python sacli.py update -H host3.cmd3.bitmascot.com -V 3.0.7
+
+python sacli.py build -B master -T clean
